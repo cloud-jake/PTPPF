@@ -35,7 +35,7 @@ gcloud dataproc batches submit spark --batch cepf-datalake-lab \
     -- --template=GCSTOBIGQUERY \
     --templateProperty log.level=${LOG_LEVEL} \
     --templateProperty project.id=${PROJECT_ID} \
-    --templateProperty gcs.bigquery.input.location=${SRC_BUCKET}/${SRC_DATA} \
+    --templateProperty gcs.bigquery.input.location=${SRC_DATA} \
     --templateProperty gcs.bigquery.input.format="csv" \
     --templateProperty gcs.bigquery.output.dataset=${DATASET} \
     --templateProperty gcs.bigquery.output.table=${TABLE} \
