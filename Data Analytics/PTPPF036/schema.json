@@ -1,0 +1,4 @@
+{
+    "review": "{{random("positive", "positive", "negative")}}",
+    "url": "{{random("https://www.rottentomatoes.com/m/28_days_later", "https://www.rottentomatoes.com/m/matrix", "https://www.rottentomatoes.com/m/bridges_of_madison_county", "https://www.rottentomatoes.com/m/all_about_my_mother", "https://www.rottentomatoes.com/m/raiders_of_the_lost_ark")}}"
+}

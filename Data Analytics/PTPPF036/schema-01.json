@@ -1,0 +1,14 @@
+{
+    "type": "record",
+    "name": "Avro",
+    "fields": [
+      {
+        "name": "url",
+        "type": "string"
+      },
+      {
+        "name": "review",
+        "type": "string"
+      }
+    ]
+  }
