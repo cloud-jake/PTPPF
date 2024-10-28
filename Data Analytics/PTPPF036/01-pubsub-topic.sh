@@ -8,6 +8,10 @@ SCHEMA=
 
 cp schema-01.json $SCHEMA
 
+gcloud pubsub schemas create $SCHEMA \
+        --type=avro \
+        --definition-file=$SCHEMA
+
 # Create a Pub/Sub topic ##Topic Name## with the schema Schema 
 # and select the message encoding as JSON.
 TOPIC=

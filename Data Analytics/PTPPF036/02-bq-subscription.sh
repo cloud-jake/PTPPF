@@ -1,6 +1,7 @@
 #!/bin/bash 
 
 PROJECT_ID=`gcloud config get-value project`
+PROJECT_NUMBER=`gcloud projects describe $PROJECT_ID --format="value(projectNumber)"`
 
 
 # Task 2. Create a BigQuery table and BigQuery subscription
@@ -9,9 +10,8 @@ PROJECT_ID=`gcloud config get-value project`
 #url:STRING,
 #review:STRING,
 
-bq mk --table ${PROJECT_ID}.ratings.from_pubsub \
-  url:STRING, \
-  review:STRING
+bq mk --table --schema=url:STRING,review:STRING \
+ratings.from_pubsub 
 
 #Create a BigQuery subscription
 
@@ -20,11 +20,11 @@ bq mk --table ${PROJECT_ID}.ratings.from_pubsub \
 #The service account is: service-PROJECT_ID@gcp-sa-pubsub.iam.gserviceaccount.com
 
 gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member="service-${PROJECT_ID}@gcp-sa-pubsub.iam.gserviceaccount.com" \
+  --member="serviceAccount:service-${PROJECT_ID}@gcp-sa-pubsub.iam.gserviceaccount.com" \
   --role="roles/bigquery.dataEditor"
 
 gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member="service-${PROJECT_ID}@gcp-sa-pubsub.iam.gserviceaccount.com" \
+  --member="serviceAccount:service-${PROJECT_ID}@gcp-sa-pubsub.iam.gserviceaccount.com" \
   --role="roles/bigquery.metadataViewer"
 
 # Create a BigQuery subscription called ##Subscription Name## 
@@ -36,6 +36,6 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 SUBSCRIPTION_ID=
 TOPIC_ID=
 
-gcloud pubsub subscriptions create SUBSCRIPTION_ID \
-    --topic=TOPIC_ID \
+gcloud pubsub subscriptions create $SUBSCRIPTION_ID \
+    --topic=$TOPIC_ID \
     --bigquery-table=${PROJECT_ID}.ratings.from_pubsub
