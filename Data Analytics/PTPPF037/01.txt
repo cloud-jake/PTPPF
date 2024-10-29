@@ -1,0 +1,21 @@
+#is_search_source
+  dimension: is_search_source {
+    type: yesno
+    sql:
+    CASE WHEN traffic_source = 'Search' THEN true ELSE false END ;;
+  }
+
+# return_days - the number of days between the 
+# Order Delivered Date and the Order Return Date.
+
+  dimension: return_days {
+    type: number
+    sql:  DATE_DIFF(${TABLE}.returned_at, ${TABLE}.delivered_at)
+     ;;
+  }
+
+  measure: total_gross_margin {
+    type: sum
+    sql:
+    ${TABLE}.sale_price - ${TABLE}.cost ;;
+  }
