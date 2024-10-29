@@ -2,6 +2,7 @@
 
 PROJECT_ID=`gcloud config get-value project`
 TOPIC_NAME=
+REGION=
 
 # Task 3. Run a data publisher job with the data generator flex template
 
@@ -22,7 +23,7 @@ SCHEMA_LOCATION=gs://$PROJECT_ID/schema.json
 gcloud dataflow flex-template run data-generator \
 --template-file-gcs-location \
 gs://dataflow-templates-us-central1/latest/flex/Streaming_Data_Generator \
---region Region \
+--region $REGION \
 --parameters \
 schemaLocation=$SCHEMA_LOCATION,\
 topic=projects/$PROJECT_ID/topics/$TOPIC_NAME,qps=10000

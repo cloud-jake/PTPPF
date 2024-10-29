@@ -18,13 +18,14 @@ ratings.from_pubsub
 # Grant the BigQuery Data Editor role and the 
 # BigQuery Metadata Viewer role to the Pub/Sub service account.
 #The service account is: service-PROJECT_ID@gcp-sa-pubsub.iam.gserviceaccount.com
+# It may take a few minutes for SA to be created after creating topic
 
 gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member="serviceAccount:service-${PROJECT_ID}@gcp-sa-pubsub.iam.gserviceaccount.com" \
+  --member="serviceAccount:service-${PROJECT_NUMBER}@gcp-sa-pubsub.iam.gserviceaccount.com" \
   --role="roles/bigquery.dataEditor"
 
 gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member="serviceAccount:service-${PROJECT_ID}@gcp-sa-pubsub.iam.gserviceaccount.com" \
+  --member="serviceAccount:service-${PROJECT_NUMBER}@gcp-sa-pubsub.iam.gserviceaccount.com" \
   --role="roles/bigquery.metadataViewer"
 
 # Create a BigQuery subscription called ##Subscription Name## 
@@ -37,5 +38,5 @@ SUBSCRIPTION_ID=
 TOPIC_ID=
 
 gcloud pubsub subscriptions create $SUBSCRIPTION_ID \
-    --topic=$TOPIC_ID \
+    --topic=$TOPIC_ID --use-topic-schema \
     --bigquery-table=${PROJECT_ID}.ratings.from_pubsub
