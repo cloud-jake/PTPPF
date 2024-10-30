@@ -1,6 +1,8 @@
 #!/bin/bash
 
 PROJECT_ID=`gcloud config get-value project`
+PROJECT_NUMBER=`gcloud projects describe $PROJECT_ID --format="value(projectNumber)"`
+
 DATASET=
 
 # Create Pub/Sub schema named station-payload-schema in Protocol Buffer format 
@@ -9,7 +11,7 @@ DATASET=
 # station-payload-schema.proto3
 
 gcloud pubsub schemas create station-payload-schema \
-        --type=proto3 \
+        --type=protocol-buffer \
         --definition-file=station-payload-schema.proto3
 
 # Create a Pub/Sub topic named station-topic which will receive
@@ -23,10 +25,18 @@ gcloud pubsub topics create station-topic \
 # with same schema as of stations table.
 
 bq query --use_legacy_sql=false --destination_table=${DATASET}.stations_streaming \
-        'SELECT * FROM ${DATASET}.stations WHERE 1=0'
+        "SELECT * FROM ${DATASET}.stations WHERE 1=0"
 
 # Create a BigQuery subscription called station-bigquery-sub 
 # and attached it to the Pub/Sub topic.
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:service-${PROJECT_NUMBER}@gcp-sa-pubsub.iam.gserviceaccount.com" \
+  --role="roles/bigquery.dataEditor"
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:service-${PROJECT_NUMBER}@gcp-sa-pubsub.iam.gserviceaccount.com" \
+  --role="roles/bigquery.metadataViewer"
+
 
 SUBSCRIPTION_ID="station-bigquery-sub"
 TOPIC_ID="station-topic"
