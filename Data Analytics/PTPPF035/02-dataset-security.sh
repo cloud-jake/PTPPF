@@ -4,9 +4,10 @@ PROJECT_ID=`gcloud config get-value project`
 PROJECT_NUMBER=`gcloud projects describe $PROJECT_ID --format="value(projectNumber)"`
 USER_ID="cepf-bq-user"
 CUSTOMER_SA="${USER_ID}@${PROJECT_ID}.iam.gserviceaccount.com"
+CUSTOMER_SA="customer-sa@qwiklabs-gcp-04-3a8408e05533.iam.gserviceaccount.com"
 
 SINK_NAME=
-DATASET=
+DATASET=central_audit_data
 LAKE=
 
 # Task 2. Configure Dataset level security
@@ -25,9 +26,14 @@ gcloud logging sinks create ${SINK_NAME} \
 #  --member="serviceAccount:service-${PROJECT_NUMBER}@gcp-sa-logging.iam.gserviceaccount.com" \
 #  --role="roles/bigquery.dataEditor"
 
-bq query --use_legacy_sql=false \
-        "GRANT roles/bigquery.dataEditor ON SCHEMA ${PROJECT_ID}.${DATASET}
-        TO serviceAccount:service-${PROJECT_NUMBER}@gcp-sa-logging.iam.gserviceaccount.com"
+#bq query --use_legacy_sql=false \
+#        "GRANT roles/bigquery.dataEditor ON SCHEMA ${PROJECT_ID}.${DATASET}
+#        TO serviceAccount:service-${PROJECT_NUMBER}@gcp-sa-logging.iam.gserviceaccount.com"
+
+
+GRANT `roles/bigquery.dataEditor` 
+ON SCHEMA central_audit_data 
+TO "serviceAccount:service-329232158424@gcp-sa-logging.iam.gserviceaccount.com"
 
 # Set up the customer service account access
 

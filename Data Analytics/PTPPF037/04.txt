@@ -1,0 +1,8 @@
+#  conditionally_filter: {
+#    filters: [order_items.shipped_date: "2021"]
+#    unless: [order_items.status,order_items.delivered_date]
+#  }
+
+#  always_filter: {
+#    filters: [order_items.status: "Shipped",users.state: "California",users.traffic_source: "Search"]
+#  }
